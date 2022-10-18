@@ -1,9 +1,14 @@
 :root {
     --sideBarWidth: 300px;
     --primary: #55717e;
-    --dark: #4c4e4e;
+    --dark: rgb(253, 251, 255);
     --gray: #756388;
-    --light: #ffffff;
+    --light: #3d3d3d;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 body {
     overflow: hidden;

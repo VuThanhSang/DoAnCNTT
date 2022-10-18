@@ -1,7 +1,15 @@
 .container {
-    display: flex;
-
+    // display: flex;
+    height: 100vh;
+    position: relative;
     .layout {
+        display: flex;
+        position: sticky;
+        height: 90vh;
+        .content-container {
+            overflow: auto;
+            width: 100%;
+        }
         width: 100%;
     }
 }

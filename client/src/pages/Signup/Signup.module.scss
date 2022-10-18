@@ -9,16 +9,15 @@ body {
 .wrapper {
     width: 400px;
     height: 85vh;
-    background-color: #fafafa;
+    background-color: #fffeff;
     border: 1px solid black;
     justify-content: center;
     align-items: center;
     text-align: center;
     position: relative;
-    left: 40%;
-    top: 20px;
     box-shadow: 0 4px 20px rgb(0 0 0 / 7%);
     border: none;
+    margin: auto;
 }
 .wrapper h1 {
     margin: 30px;
@@ -116,6 +115,9 @@ body {
 }
 .goog:hover {
     color: red;
+}
+.con-signin {
+    padding: 10px;
 }
 .signin:hover {
     color: red;
