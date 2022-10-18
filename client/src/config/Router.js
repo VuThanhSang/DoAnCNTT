@@ -3,5 +3,7 @@ const router = {
     Login: '/login',
     Signup: '/signup',
     Resetpass: '/resetpass',
+    Students: '/students',
+    Lectures: '/lectures',
 };
 export default router;
