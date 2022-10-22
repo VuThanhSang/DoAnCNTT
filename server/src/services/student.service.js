@@ -23,9 +23,6 @@ const update = async (id, data) => {
 const getFullStudent = async () => {
     try {
         const students = await StudentModel.getFullStudent();
-        if (!students) {
-            throw new Error('Student = 0');
-        }
         return students;
     } catch (error) {
         throw new Error(error);
