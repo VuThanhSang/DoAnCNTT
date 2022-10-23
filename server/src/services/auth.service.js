@@ -12,7 +12,7 @@ const encodedAccessToken = (userId, authType) => {
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: '2m',
+            expiresIn: '30s',
         },
     );
 };

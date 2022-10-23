@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import { AuthController } from '../../controllers/auth.controller';
+import { verifyToken } from '../../middlewares/verifyToken';
 const passportConfig = require('../../middlewares/passport');
 
 const router = express.Router();
@@ -13,4 +14,5 @@ router.route('/login/failed').get(AuthController.loginFailed);
 router.route('/login/success').get(AuthController.loginSuccess);
 router.route('/login/failed').get(AuthController.loginFailed);
 router.route('/refreshToken').post(AuthController.refresh);
+router.route('/logout').post(verifyToken, AuthController.logout);
 export const AuthRoute = router;

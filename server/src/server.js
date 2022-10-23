@@ -4,6 +4,7 @@ import passport from 'passport';
 import { apiV1 } from './routes/v1';
 import { connectDB } from './config/mongodb';
 import { env } from './config/environment';
+
 import cors from 'cors';
 import cookieSession from 'cookie-session';
 connectDB()
@@ -29,7 +30,7 @@ const bootServer = () => {
     );
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use(cors({ origin: 'http://localhost:3000', methods: 'GET,POST,PUT,DELETE', Credentials: true }));
+    app.use(cors({ origin: 'http://localhost:3000', methods: 'GET,POST,PUT,DELETE', credentials: true }));
     // use api
     app.use('/v1', apiV1);
     app.listen(env.APP_PORT, () => console.log(`Example app listening on port http://${env.APP_HOST}:${env.APP_PORT}`));

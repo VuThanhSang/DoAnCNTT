@@ -3,10 +3,20 @@ import styles from './Login.module.scss';
 import { ConfigRouter } from '~/config';
 import Button from '~/layout/components/Button';
 import { FaUser, FaLock, FaFacebook, FaGoogle } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { loginGoogleUser } from '~/redux/apiRequest';
+import { useNavigate } from 'react-router-dom';
 //component
 import images from '~/asset/images';
 const cx = classNames.bind(styles);
 function Home() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLoginWithGoogle = async (e) => {
+        e.preventDefault();
+        window.open('http://localhost:3240/v1/auth/google/', '_self');
+        await loginGoogleUser(dispatch);
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('wrap-form-login')}>
@@ -40,7 +50,7 @@ function Home() {
                             <Button className={cx('face')}>
                                 <FaFacebook />
                             </Button>
-                            <Button className={cx('goog')}>
+                            <Button onClick={handleLoginWithGoogle} className={cx('goog')}>
                                 <FaGoogle />
                             </Button>
                         </div>
