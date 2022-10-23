@@ -7,12 +7,14 @@ const googleCallBack = [
     passport.authenticate('google', {
         failureRedirect: '/login/failed',
     }),
-    (req, res) => {
+    async (req, res) => {
         userInfo = req.user;
-        res.redirect('http://localhost:3000');
+        console.log('log cho callback', userInfo);
+        await res.redirect('http://localhost:3000');
     },
 ];
 const loginSuccess = async (req, res) => {
+    console.log('log cho getdata', userInfo);
     if (userInfo !== null) {
         const accessToken = await AuthService.encodedAccessToken(userInfo.data._id, userInfo.authType);
         const refreshToken = await AuthService.encodedRefreshToken(userInfo.data._id, userInfo.authType);
@@ -37,6 +39,12 @@ const loginSuccess = async (req, res) => {
 const loginFailed = (req, res, next) => {
     res.status(401).json({ error: 404 });
 };
+const logout = (req, res, next) => {
+    res.clearCookie('refreshToken');
+    userInfo = null;
+    refreshTokenList = refreshTokenList.filter((token) => token !== req.cookies.refreshToken);
+    res.status(200).json('Logged out successfully');
+};
 const refresh = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     console.log('refreshToken from cookie: ', refreshToken);
@@ -47,7 +55,7 @@ const refresh = async (req, res) => {
     }
     Jwt.verify(refreshToken, process.env.JWT_REFRESH, (err, user) => {
         if (err) {
-            console.log(err);
+            console.log('loi day ne', err);
         }
         refreshTokenList = refreshTokenList.filter((token) => token !== refreshToken);
         const newAccessToken = AuthService.encodedAccessToken(user._id);
@@ -62,4 +70,4 @@ const refresh = async (req, res) => {
         res.status(200).json({ accessToken: newAccessToken });
     });
 };
-export const AuthController = { googleCallBack, loginSuccess, loginFailed, refresh };
+export const AuthController = { googleCallBack, loginSuccess, loginFailed, refresh, logout };
