@@ -10,7 +10,12 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Badge, Dropdown, Form, InputGroup } from 'react-bootstrap';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { createAxios } from '~/createInstance';
+import { loginSuccess } from '~/redux/authSlice';
+import { getListLecture } from '~/redux/apiRequest';
+
 const cx = classNames.bind(styles);
 const columns = [
     { id: 'stt', label: 'STT', minWidth: 50 },
@@ -44,59 +49,10 @@ const columns = [
     },
 ];
 
-function createData(stt, avt, email, fullName, phoneNumber, majors) {
-    return { stt, avt, email, fullName, phoneNumber, majors };
+function createData(id, stt, avt, email, fullName, phoneNumber, majors) {
+    return { id, stt, avt, email, fullName, phoneNumber, majors };
 }
 
-const rows = [
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 'zimb240@gmail.com', 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-];
 const majors = [
     {
         name: 'Công nghệ phần mềm',
@@ -125,6 +81,22 @@ const majors = [
 ];
 function Lectures() {
     const [stateMajorsFilter, setStateMajorsFilter] = useState('Tất cả chuyên ngành');
+    const user = useSelector((state) => state.auth.login?.currentLogin);
+    const listLecture = useSelector((state) => state.users.lectures?.listLecture);
+    const dispatch = useDispatch();
+    let axiosJWT = createAxios(user, dispatch, loginSuccess);
+    useEffect(() => {
+        if (user?.accessToken) {
+            getListLecture(axiosJWT, user?.accessToken, dispatch);
+        }
+    }, []);
+
+    const rows = [];
+    listLecture?.forEach((element) => {
+        rows.push(
+            createData(element._id, 1, 'AVT', element.Email, element.FullName, element.PhoneNumber, element.Majors),
+        );
+    });
     const MajorsFilter = (e) => {
         if (e === 'all') {
             setStateMajorsFilter('Tất cả chuyên ngành');
@@ -187,7 +159,7 @@ function Lectures() {
                             <TableBody>
                                 {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (
@@ -205,7 +177,7 @@ function Lectures() {
                         </Table>
                     </TableContainer>
                     <h6 className={cx('student-total')}>
-                        <Badge bg="secondary">Tổng số lượng sinh viên : {rows.length}</Badge>
+                        <Badge bg="secondary">Tổng số lượng giảng viên : {rows.length}</Badge>
                     </h6>
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 100]}

@@ -15,7 +15,7 @@ function Home() {
     const handleLoginWithGoogle = async (e) => {
         e.preventDefault();
         window.open('http://localhost:3240/v1/auth/google/', '_self');
-        await loginGoogleUser(dispatch);
+        // await loginGoogleUser(dispatch);
     };
     return (
         <div className={cx('wrapper')}>

@@ -14,8 +14,7 @@ const googleCallBack = [
     },
 ];
 const loginSuccess = async (req, res) => {
-    console.log('log cho getdata', userInfo);
-    if (userInfo !== null) {
+    if (userInfo !== null && userInfo.data !== null) {
         const accessToken = await AuthService.encodedAccessToken(userInfo.data._id, userInfo.authType);
         const refreshToken = await AuthService.encodedRefreshToken(userInfo.data._id, userInfo.authType);
         res.cookie('refreshToken', refreshToken, {
@@ -33,7 +32,12 @@ const loginSuccess = async (req, res) => {
             refreshToken: refreshToken,
         });
     } else {
-        res.json(null);
+        if (userInfo == null) {
+            res.json(null);
+        } else {
+            res.json({ success: false, message: 'Email không thuộc Trường Đại Học Sưu Phạm Kỹ thuật' });
+            userInfo = null;
+        }
     }
 };
 const loginFailed = (req, res, next) => {
