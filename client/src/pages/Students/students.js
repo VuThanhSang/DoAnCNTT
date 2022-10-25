@@ -9,7 +9,12 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Badge, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getListStudent } from '~/redux/apiRequest';
+import { useDispatch, useSelector } from 'react-redux';
+import { createAxios } from '~/createInstance';
+import { loginSuccess } from '~/redux/authSlice';
+
 const cx = classNames.bind(styles);
 const years = [];
 for (let index = 9; index < 22; index++) {
@@ -74,63 +79,28 @@ const columns = [
     },
 ];
 
-function createData(stt, avt, mssv, fullName, phoneNumber, majors) {
-    return { stt, avt, mssv, fullName, phoneNumber, majors };
+function createData(id, stt, avt, mssv, fullName, phoneNumber, majors) {
+    return { id, stt, avt, mssv, fullName, phoneNumber, majors };
 }
 
-const rows = [
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-    createData(1, 'AVT', 20110555, 'Vũ Thanh Sang', '0326294906', 'Công nghệ phần mềm'),
-];
 function Students() {
     const [stateMajorsFilter, setStateMajorsFilter] = useState('Tất cả chuyên ngành');
     const [stateYearsFilter, setStateYearsFilter] = useState('Tất cả niên khóa');
-
+    const user = useSelector((state) => state.auth.login?.currentLogin);
+    const listStudent = useSelector((state) => state.users.students?.listStudent);
+    const dispatch = useDispatch();
+    let axiosJWT = createAxios(user, dispatch, loginSuccess);
+    useEffect(() => {
+        if (user?.accessToken) {
+            getListStudent(axiosJWT, user?.accessToken, dispatch);
+        }
+    }, []);
+    const rows = [];
+    listStudent?.forEach((element) => {
+        rows.push(
+            createData(element._id, 1, 'AVT', element.MSSV, element.FullName, element.PhoneNumber, element.Majors),
+        );
+    });
     const MajorsFilter = (e) => {
         if (e === 'all') {
             setStateMajorsFilter('Tất cả chuyên ngành');
@@ -214,7 +184,7 @@ function Students() {
                             <TableBody>
                                 {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (

@@ -47,21 +47,6 @@ passport.use(
         },
         async (req, accessToken, refreshToken, profile, done) => {
             try {
-                // const existUser = await getDB()
-                //     .collection('Users')
-                //     .findOne({ authGoogleId: profile.id, authType: 'google' });
-                // // exits in DB
-                // if (existUser) {
-                //     return done(null, existUser);
-                // }
-                // //if new account
-                // const newUser = await UserModel.signUp({
-                //     firstName: profile.name.givenName,
-                //     lastName: profile.name.familyName,
-                //     authType: 'google',
-                //     email: profile.emails[0].value,
-                //     authGoogleId: profile.id,
-                // });
                 if (profile._json.hd) {
                     // console.log(profile);
                     if (profile._json.hd.includes('student.hcmute')) {
