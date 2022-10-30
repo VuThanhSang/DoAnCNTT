@@ -24,9 +24,10 @@ const getFullStudent = async (req, res) => {
 
 const update = async (req, res) => {
     try {
+        // console.log(req);
         const id = req.params;
-        const result = await StudentService.update(id, req.body);
-        res.status(HttpStatusCode.OK).json({ data: { student: result } });
+        const result = await StudentService.update(id, req);
+        res.status(HttpStatusCode.OK).json({ data: result });
     } catch (error) {
         res.status(HttpStatusCode.INTERNAL_SERVER).json({
             error: new Error(error).message,

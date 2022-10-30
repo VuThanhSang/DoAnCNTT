@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { StudentModel } from '../models/students.model';
+const fs = require('fs');
 const createNew = async (data) => {
     try {
         const student = await StudentModel.createNew(data);
@@ -11,7 +12,11 @@ const createNew = async (data) => {
 
 const update = async (id, data) => {
     try {
-        const updateData = { ...data, updateAt: Date.now() };
+        const updateData = {
+            ...data.body,
+            Avatar: { img: fs.readFileSync('uploads/' + data.file.filename), contentType: 'image/png' },
+            updateAt: Date.now(),
+        };
         if (updateData._id) delete updateData._id;
         const result = await StudentModel.update(id, updateData);
         return result;

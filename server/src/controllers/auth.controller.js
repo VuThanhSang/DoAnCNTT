@@ -9,7 +9,7 @@ const googleCallBack = [
     }),
     async (req, res) => {
         userInfo = req.user;
-        console.log('log cho callback', userInfo);
+        // console.log('log cho callback', userInfo);
         await res.redirect('http://localhost:3000');
     },
 ];

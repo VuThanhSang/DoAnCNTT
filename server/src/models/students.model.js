@@ -2,7 +2,6 @@ const { ObjectId } = require('mongodb');
 const Joi = require('joi');
 const { getDB } = require('~/config/mongodb');
 const { CollectionName } = require('~/utilities/constants');
-const multer = require('multer');
 const fs = require('fs');
 //define Board collection
 const studentCollectionName = CollectionName.STUDENT_COLLECTION_NAME;
@@ -12,7 +11,10 @@ const studentCollectionSchema = Joi.object({
     FullName: Joi.string().default(null),
     PhoneNumber: Joi.string().min(10).max(10).default(null),
     Majors: Joi.string().default(null),
-    Avatar: Joi.any().default(null),
+    Avatar: Joi.object({
+        img: Buffer,
+        contentType: Joi.string().default(null),
+    }).default(null),
     createdAt: Joi.date().timestamp().default(Date.now()),
     updateAt: Joi.date().timestamp().default(null),
     _destroy: Joi.boolean().default(false),
@@ -36,17 +38,6 @@ const getFullStudent = async () => {
     const result = await getDB().collection(studentCollectionName).find({}).toArray();
     return result;
 };
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
-    },
-});
-
-const upload = multer({ storage: storage });
 
 const createNew = async (data) => {
     try {
