@@ -2,9 +2,21 @@ const express = require('express');
 import { StudentController } from '../../controllers/student.controller';
 import { StudentValidation } from '../../validations/student.validation';
 import { verifyToken } from '../../middlewares/verifyToken';
+import multer from 'multer';
 const router = express.Router();
 
-router.route('/create').post(StudentValidation.createNew, StudentController.createNew);
-router.route('/update/:id').put(StudentValidation.update, StudentController.update);
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    },
+});
+
+const upload = multer({ storage: storage });
+
+router.route('/create').post(StudentValidation.createNew, upload.single('Image'), StudentController.createNew);
+router.route('/update/:id').put(upload.single('Image'), StudentController.update);
 router.route('/getFullStudent').get(verifyToken, StudentController.getFullStudent);
 export const StudentRoute = router;

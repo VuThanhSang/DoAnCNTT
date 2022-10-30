@@ -8,6 +8,7 @@ import Signup from '~/pages/Signup';
 import Resetpass from '~/pages/Resetpass';
 import Students from '~/pages/Students';
 import Lectures from '~/pages/Lectures';
+import UserProfile from '~/pages/UserProfile';
 // Public routes
 const publicRoutes = [
     { path: ConfigRouter.Home, component: Home },
@@ -16,6 +17,7 @@ const publicRoutes = [
     { path: ConfigRouter.Resetpass, component: Resetpass, layout: null },
     { path: ConfigRouter.Students, component: Students },
     { path: ConfigRouter.Lectures, component: Lectures },
+    { path: ConfigRouter.UserProfile, component: UserProfile },
 ];
 const privateRoutes = [];
 

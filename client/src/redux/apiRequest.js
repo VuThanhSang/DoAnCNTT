@@ -1,12 +1,14 @@
 import { ConfigRouter } from '~/config';
 import axios from 'axios';
 import {
+    loginFailed,
     loginStart,
     loginSuccess,
     logOutFailed,
     logOutStart,
     logOutSuccess,
     registerFailed,
+    updateProfileSuccess,
     // registerStart,
     // registerSuccess,
 } from './authSlice';
@@ -75,5 +77,17 @@ export const getListStudent = async (axiosJWT, accessToken, dispatch) => {
         dispatch(getListStudentSuccess(res.data));
     } catch (error) {
         dispatch(getListStudentFailed());
+    }
+};
+
+export const updateStudentProfile = async (axiosJWT, accessToken, id, data, dispatch) => {
+    dispatch(loginStart());
+    try {
+        const res = await axiosJWT.put(`http://localhost:3240/v1/students/update/${id}`, data, {
+            headers: { token: `Bearer ${accessToken}` },
+        });
+        dispatch(updateProfileSuccess(res.data));
+    } catch (error) {
+        dispatch(loginFailed());
     }
 };

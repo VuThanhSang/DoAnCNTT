@@ -57,6 +57,12 @@ const authSlice = createSlice({
             state.login.isFetching = false;
             state.login.error = true;
         },
+        updateProfileSuccess: (state, action) => {
+            state.login.isFetching = false;
+
+            state.login.currentLogin.user = action.payload;
+            state.login.error = false;
+        },
     },
 });
 
@@ -70,6 +76,7 @@ export const {
     logOutSuccess,
     logOutStart,
     logOutFailed,
+    updateProfileSuccess,
 } = authSlice.actions;
 
 export default authSlice.reducer;

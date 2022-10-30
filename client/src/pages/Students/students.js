@@ -1,20 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './student.module.scss';
 import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { Badge, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { DataGrid } from '@mui/x-data-grid';
+import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { getListStudent } from '~/redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAxios } from '~/createInstance';
 import { loginSuccess } from '~/redux/authSlice';
-
+import { Buffer } from 'buffer';
+import Avatar from '@mui/material/Avatar';
 const cx = classNames.bind(styles);
 const years = [];
 for (let index = 9; index < 22; index++) {
@@ -47,45 +42,10 @@ const majors = [
     },
 ];
 
-const columns = [
-    { id: 'stt', label: 'STT', minWidth: 50 },
-    { id: 'avt', label: 'Ảnh đại diện', minWidth: 100, align: 'center' },
-    {
-        id: 'mssv',
-        label: 'MSSV',
-        minWidth: 200,
-        align: 'center',
-    },
-    {
-        id: 'fullName',
-        label: 'Họ Tên',
-        minWidth: 200,
-        align: 'center',
-        format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'phoneNumber',
-        label: 'SĐT',
-        minWidth: 200,
-        align: 'center',
-        format: (value) => value.toFixed(2),
-    },
-    {
-        id: 'majors',
-        label: 'Chuyên ngành',
-        minWidth: 200,
-        align: 'center',
-        format: (value) => value.toFixed(2),
-    },
-];
-
-function createData(id, stt, avt, mssv, fullName, phoneNumber, majors) {
-    return { id, stt, avt, mssv, fullName, phoneNumber, majors };
-}
-
 function Students() {
     const [stateMajorsFilter, setStateMajorsFilter] = useState('Tất cả chuyên ngành');
     const [stateYearsFilter, setStateYearsFilter] = useState('Tất cả niên khóa');
+    const [pageSize, setPageSize] = useState(5);
     const user = useSelector((state) => state.auth.login?.currentLogin);
     const listStudent = useSelector((state) => state.users.students?.listStudent);
     const dispatch = useDispatch();
@@ -95,12 +55,48 @@ function Students() {
             getListStudent(axiosJWT, user?.accessToken, dispatch);
         }
     }, []);
+
     const rows = [];
+    let count = 1;
     listStudent?.forEach((element) => {
-        rows.push(
-            createData(element._id, 1, 'AVT', element.MSSV, element.FullName, element.PhoneNumber, element.Majors),
-        );
+        let base64String = '';
+        if (element?.Avatar?.img) {
+            const imgData = Buffer.from(element?.Avatar?.img, 'base64');
+            base64String = btoa(String.fromCharCode(...new Uint8Array(imgData)));
+        }
+        rows.push({
+            id: count,
+            col1: count++,
+            col2: element.MSSV,
+            col3: base64String,
+            col4: element.FullName,
+            col5: element.Email,
+            col6: element.phoneNumber,
+            col7: element.Majors,
+        });
     });
+    const columns = [
+        { field: 'col1', headerName: 'Stt', width: 50 },
+        { field: 'col2', headerName: 'MSSV', width: 150 },
+        {
+            field: 'col3',
+            headerName: 'Ảnh Đại Diện',
+            width: 150,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Avatar sx={{ width: 50, height: 50 }} src={`data:image/png;base64,${params.value}`} />
+                        {/* {params.value.username} */}
+                    </>
+                );
+            },
+        },
+        { field: 'col4', headerName: 'Họ Và Tên', width: 150 },
+        { field: 'col5', headerName: 'Email', width: 300 },
+        { field: 'col6', headerName: 'Số Điện Thoại', width: 150 },
+        { field: 'col7', headerName: 'Chuyên Ngành', width: 150 },
+    ];
+
     const MajorsFilter = (e) => {
         if (e === 'all') {
             setStateMajorsFilter('Tất cả chuyên ngành');
@@ -115,16 +111,6 @@ function Students() {
         } else {
             setStateYearsFilter(e);
         }
-    };
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
     };
     return (
         <div className={cx('wrapper')}>
@@ -166,53 +152,16 @@ function Students() {
                     </InputGroup>
                 </div>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                    <TableContainer sx={{ maxHeight: 430 }}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth }}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <h6 className={cx('student-total')}>
-                        <Badge bg="secondary">Tổng số lượng sinh viên : {rows.length}</Badge>
-                    </h6>
-                    <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
-                        component="div"
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
+                    <div style={{ height: 520, width: '100%' }}>
+                        <DataGrid
+                            pageSize={pageSize}
+                            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                            rowsPerPageOptions={[5, 10, 20]}
+                            rows={rows}
+                            columns={columns}
+                            rowHeight={100}
+                        />
+                    </div>
                 </Paper>
             </div>
         </div>

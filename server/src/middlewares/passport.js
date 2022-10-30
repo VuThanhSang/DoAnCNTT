@@ -48,7 +48,6 @@ passport.use(
         async (req, accessToken, refreshToken, profile, done) => {
             try {
                 if (profile._json.hd) {
-                    // console.log(profile);
                     if (profile._json.hd.includes('student.hcmute')) {
                         const exitsStudent = await getDB().collection('Students').findOne({ Email: profile.email });
                         if (exitsStudent) {
