@@ -80,6 +80,32 @@ export const getListStudent = async (axiosJWT, accessToken, dispatch) => {
     }
 };
 
+export const getProjectTypeList = async () => {
+    try {
+        const res = await axios.get('http://localhost:3240/v1/projects/getProjectType');
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const getProjectList = async (projectType) => {
+    try {
+        const res = await axios.get(`http://localhost:3240/v1/projects/getList/${projectType}`);
+        console.log(res.data.data);
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+export const findOneProjectById = async (id) => {
+    try {
+        const res = await axios.get(`http://localhost:3240/v1/projects/${id}`);
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
 export const updateStudentProfile = async (axiosJWT, accessToken, id, data, dispatch) => {
     dispatch(loginStart());
     try {

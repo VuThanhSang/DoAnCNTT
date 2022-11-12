@@ -15,7 +15,7 @@ const projectCollectionSchema = Joi.object({
     TotalStudents: Joi.number().default(0),
     OtherMajorsRegister: Joi.boolean().default(false),
     Majors: Joi.string().default(null),
-    ProjectType: Joi.string().default(null),
+    ProjectType: Joi.object({ TypeName: Joi.string().default(null), TypeId: Joi.string().default(null) }),
     Year: Joi.date().default(Date.now()),
     Leader: Joi.string().default(null),
     Member: Joi.array().items(Joi.string()).default([]),
@@ -39,9 +39,28 @@ const findOneById = async (id) => {
 
 const getFullProject = async () => {
     const result = await getDB().collection(projectCollectionName).find({}).toArray();
+
+    return result;
+};
+const getProjectTypeList = async () => {
+    const result = await getDB()
+        .collection(projectCollectionName)
+        .aggregate([{ $group: { _id: { ProjectType: '$ProjectType' }, count: { $sum: 1 } } }])
+        .toArray();
     return result;
 };
 
+const getList = async (projectType) => {
+    try {
+        const result = await getDB()
+            .collection(projectCollectionName)
+            .find({ 'ProjectType.TypeId': projectType })
+            .toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const createNew = async (data) => {
     try {
         const value = await validateSchema(data);
@@ -67,4 +86,4 @@ const update = async (id, data) => {
     }
 };
 
-export const ProjectModel = { createNew, update, getFullProject };
+export const ProjectModel = { createNew, update, getFullProject, getProjectTypeList, getList, findOneById };

@@ -20,6 +20,25 @@ const update = async (id, data) => {
     }
 };
 
+const getProjectTypeList = async () => {
+    try {
+        const types = await ProjectModel.getProjectTypeList();
+        return types;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const getList = async (data) => {
+    console.log(data);
+    try {
+        const result = await ProjectModel.getList(data);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 const getFullProject = async () => {
     try {
         const projects = await ProjectModel.getFullProject();
@@ -29,4 +48,12 @@ const getFullProject = async () => {
     }
 };
 
-export const ProjectService = { createNew, update, getFullProject };
+const findOneById = async (id) => {
+    try {
+        const project = await ProjectModel.findOneById(id);
+        return project;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+export const ProjectService = { createNew, update, getFullProject, getProjectTypeList, getList, findOneById };

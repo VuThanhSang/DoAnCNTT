@@ -1,0 +1,51 @@
+.wrapper {
+    height: 100%;
+    overflow: auto;
+    .des {
+        display: flex;
+        width: 100%;
+        margin: 30px auto;
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+        position: relative;
+        .icon {
+            cursor: pointer;
+            height: 40px;
+            width: 40px;
+        }
+        .list-items {
+            padding: 0 30px;
+            width: 100%;
+            border: 1px solid rgb(212, 208, 208);
+            .item {
+                margin: 5px 0;
+            }
+        }
+    }
+    .btn {
+        margin-bottom: 40px;
+        margin-top: 10px;
+        left: 40%;
+    }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
