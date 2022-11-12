@@ -21,7 +21,27 @@ const getFullProject = async (req, res) => {
         });
     }
 };
+const getProjectTypeList = async (req, res) => {
+    try {
+        const result = await ProjectService.getProjectTypeList();
+        res.status(HttpStatusCode.OK).json({ data: { project: result } });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 
+const getList = async (req, res) => {
+    try {
+        const result = await ProjectService.getList(req.params.typeId);
+        res.status(200).json({ data: { project: result } });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 const update = async (req, res) => {
     try {
         const id = req.params;
@@ -33,4 +53,16 @@ const update = async (req, res) => {
         });
     }
 };
-export const ProjectController = { createNew, getFullProject, update };
+
+const findOneById = async (req, res) => {
+    try {
+        const id = req.params;
+        const result = await ProjectService.findOneById(id);
+        res.status(HttpStatusCode.OK).json({ data: result });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
+export const ProjectController = { createNew, getFullProject, update, getProjectTypeList, getList, findOneById };

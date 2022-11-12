@@ -15,7 +15,7 @@ function App(props) {
         {
             text: 'Danh Sách Đề Tài',
             icon: require('../../../asset/icon/icons8-list-24.png'),
-            route: ConfigRouter.Students,
+            route: ConfigRouter.Project,
         },
         {
             text: 'Thông Tin Giảng Viên',
