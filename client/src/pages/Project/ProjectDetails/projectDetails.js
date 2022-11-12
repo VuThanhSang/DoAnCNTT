@@ -235,7 +235,7 @@ function ProjectDetails() {
                     </ListGroup>
                 )}
             </div>
-            {(user.user.data?.Majors === stateProject?.Majors || stateProject?.OtherMajorsRegister === true) && (
+            {(user?.user?.data?.Majors === stateProject?.Majors || stateProject?.OtherMajorsRegister === true) && (
                 <Button className={cx('btn')} endIcon={<LoginIcon />} variant="contained">
                     Đăng ký đề tài
                 </Button>
