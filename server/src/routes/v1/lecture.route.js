@@ -7,4 +7,5 @@ const router = express.Router();
 router.route('/create').post(LectureValidation.createNew, LectureController.createNew);
 router.route('/update/:id').put(LectureValidation.update, LectureController.update);
 router.route('/getFullLecture').get(verifyToken, LectureController.getFullLecture);
+router.route('/search').post(LectureController.search);
 export const LectureRoute = router;

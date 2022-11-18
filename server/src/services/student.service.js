@@ -10,6 +10,15 @@ const createNew = async (data) => {
     }
 };
 
+const search = async (data) => {
+    try {
+        const result = await StudentModel.search(data);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 const update = async (id, data) => {
     try {
         const updateData = {
@@ -34,4 +43,37 @@ const getFullStudent = async () => {
     }
 };
 
-export const StudentService = { createNew, update, getFullStudent };
+const registerMajors = async (id, data) => {
+    try {
+        const student = await StudentModel.registerMajors(id, data);
+        return student;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const listStudentOfMajors = async (majorsName) => {
+    try {
+        const result = await StudentModel.listStudentOfMajors(majorsName);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+const getRegistrationHistory = async (id) => {
+    try {
+        const result = await StudentModel.getRegistrationHistory(id);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+export const StudentService = {
+    createNew,
+    update,
+    getFullStudent,
+    search,
+    registerMajors,
+    listStudentOfMajors,
+    getRegistrationHistory,
+};

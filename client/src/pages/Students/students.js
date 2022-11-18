@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper';
 import { DataGrid } from '@mui/x-data-grid';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import { getListStudent } from '~/redux/apiRequest';
+import { getListStudent, searchStudent } from '~/redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAxios } from '~/createInstance';
 import { loginSuccess } from '~/redux/authSlice';
@@ -45,17 +45,27 @@ const majors = [
 function Students() {
     const [stateMajorsFilter, setStateMajorsFilter] = useState('Tất cả chuyên ngành');
     const [stateYearsFilter, setStateYearsFilter] = useState('Tất cả niên khóa');
+    const [stateSearchValue, setStateSearchValue] = useState(null);
     const [pageSize, setPageSize] = useState(5);
+    const [listStudent, setStateListStudent] = useState(null);
     const user = useSelector((state) => state.auth.login?.currentLogin);
-    const listStudent = useSelector((state) => state.users.students?.listStudent);
+
     const dispatch = useDispatch();
     let axiosJWT = createAxios(user, dispatch, loginSuccess);
     useEffect(() => {
         if (user?.accessToken) {
-            getListStudent(axiosJWT, user?.accessToken, dispatch);
+            getListStudent(axiosJWT, user?.accessToken, dispatch).then((data) => {
+                setStateListStudent(data.student);
+            });
         }
     }, []);
-
+    useEffect(() => {
+        searchStudent(stateSearchValue).then((data) => {
+            // console.log(data);
+            // console.log(stateSearchValue);
+            setStateListStudent(data);
+        });
+    }, [stateSearchValue]);
     const rows = [];
     let count = 1;
     listStudent?.forEach((element) => {
@@ -148,7 +158,13 @@ function Students() {
                         </Dropdown>
                     </div>
                     <InputGroup className={cx('mb-3', 'search-bar')}>
-                        <Form.Control placeholder="Search" aria-label="Text input with checkbox" />
+                        <Form.Control
+                            onChange={(e) => {
+                                setStateSearchValue(e.target.value);
+                            }}
+                            placeholder="Search"
+                            aria-label="Text input with checkbox"
+                        />
                     </InputGroup>
                 </div>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>

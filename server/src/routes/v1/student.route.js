@@ -19,4 +19,8 @@ const upload = multer({ storage: storage });
 router.route('/create').post(StudentValidation.createNew, upload.single('Image'), StudentController.createNew);
 router.route('/update/:id').put(upload.single('Image'), StudentController.update);
 router.route('/getFullStudent').get(verifyToken, StudentController.getFullStudent);
+router.route('/search').post(StudentController.search);
+router.route('/registerMajors/:id').post(StudentController.registerMajors);
+router.route('/studentMajorsList/:id').get(StudentController.listStudentOfMajors);
+router.route('/registrationHistory/:id').get(StudentController.getRegistrationHistory);
 export const StudentRoute = router;

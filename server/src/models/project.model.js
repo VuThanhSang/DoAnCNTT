@@ -22,6 +22,15 @@ const projectCollectionSchema = Joi.object({
     LectureCounterArgument: Joi.string().default(null),
     Score: Joi.string().default('Chưa có điểm'),
 });
+
+const registrationHistorySchema = Joi.object({
+    idStudent: Joi.string().required(),
+    idProject: Joi.string().required(),
+    registeredDate: Joi.date().timestamp().default(Date.now()),
+});
+const validateSchemaRH = async (data) => {
+    return await registrationHistorySchema.validateAsync(data, { abortEarly: false });
+};
 const validateSchema = async (data) => {
     return await projectCollectionSchema.validateAsync(data, { abortEarly: false });
 };
@@ -31,6 +40,27 @@ const findOneById = async (id) => {
         const result = await getDB()
             .collection(projectCollectionName)
             .findOne({ _id: ObjectId(id) });
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const search = async (data) => {
+    try {
+        const result = await getDB()
+            .collection(projectCollectionName)
+            .find({
+                $or: [
+                    {
+                        Name: { $regex: data },
+                    },
+                    {
+                        Instructor: { $regex: data },
+                    },
+                ],
+            })
+            .toArray();
         return result;
     } catch (error) {
         throw new Error(error);
@@ -71,6 +101,19 @@ const createNew = async (data) => {
         throw new Error(error);
     }
 };
+const registerProject = async (idStudent, idProject) => {
+    try {
+        const valueRH = await validateSchemaRH({ idStudent: idStudent, idProject: idProject });
+        await getDB()
+            .collection(projectCollectionName)
+            .findOneAndUpdate({ _id: ObjectId(idProject) }, { $push: { Member: idStudent } });
+        await getDB().collection('Registration History').insertOne(valueRH);
+        return await findOneById(idProject);
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 const update = async (id, data) => {
     try {
         const updateData = {
@@ -86,4 +129,13 @@ const update = async (id, data) => {
     }
 };
 
-export const ProjectModel = { createNew, update, getFullProject, getProjectTypeList, getList, findOneById };
+export const ProjectModel = {
+    createNew,
+    update,
+    getFullProject,
+    getProjectTypeList,
+    getList,
+    findOneById,
+    search,
+    registerProject,
+};

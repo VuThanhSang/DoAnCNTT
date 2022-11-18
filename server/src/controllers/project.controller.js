@@ -10,7 +10,16 @@ const createNew = async (req, res) => {
         });
     }
 };
-
+const search = async (req, res) => {
+    try {
+        const result = await ProjectService.search(req.body.search);
+        res.status(HttpStatusCode.OK).json({ data: { project: result } });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 const getFullProject = async (req, res) => {
     try {
         const result = await ProjectService.getFullProject();
@@ -53,7 +62,16 @@ const update = async (req, res) => {
         });
     }
 };
-
+const registerProject = async (req, res) => {
+    try {
+        const result = await ProjectService.registerProject(req.body.student, req.body.project);
+        res.status(HttpStatusCode.OK).json({ data: { project: result } });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 const findOneById = async (req, res) => {
     try {
         const id = req.params;
@@ -65,4 +83,13 @@ const findOneById = async (req, res) => {
         });
     }
 };
-export const ProjectController = { createNew, getFullProject, update, getProjectTypeList, getList, findOneById };
+export const ProjectController = {
+    createNew,
+    getFullProject,
+    update,
+    getProjectTypeList,
+    getList,
+    findOneById,
+    search,
+    registerProject,
+};

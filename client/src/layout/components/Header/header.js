@@ -42,7 +42,7 @@ function Header() {
     }, [user?.success]);
     //logout
     const accessToken = user?.accessToken;
-    const id = user?.user?.data._id;
+    const id = user?.user?.data?._id;
     const navigate = useNavigate();
     let axiosJWT = createAxios(user, dispatch, loginSuccess);
     const handleLogOutUser = (e) => {

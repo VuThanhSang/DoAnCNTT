@@ -13,7 +13,7 @@ import { ConfigRouter } from '~/config';
 import images from '~/asset/images';
 import { Link } from 'react-router-dom';
 import { Form, InputGroup } from 'react-bootstrap';
-import { getProjectTypeList, getProjectList } from '~/redux/apiRequest';
+import { getProjectTypeList, getProjectList, searchProject } from '~/redux/apiRequest';
 import { useEffect, useState } from 'react';
 
 import Accordion from '@mui/material/Accordion';
@@ -27,11 +27,17 @@ const cx = classNames.bind(styles);
 function Project() {
     const [stateTypeList, setStateTypeList] = useState(null);
     const [stateProjectList, setStateProjectList] = useState(null);
+    const [stateSearchValue, setStateSearchValue] = useState(null);
     useEffect(() => {
         getProjectTypeList().then((data) => {
             setStateTypeList(data.project);
         });
     }, []);
+    useEffect(() => {
+        searchProject(stateSearchValue).then((data) => {
+            setStateProjectList(data);
+        });
+    }, [stateSearchValue]);
     const selectTypeHandle = (TypeId) => {
         getProjectList(TypeId).then((data) => {
             setStateProjectList(data);
@@ -53,17 +59,24 @@ function Project() {
                 <div className={cx('page-title')}>
                     <h3> Danh sách loại đề tài</h3>
                     <InputGroup className={cx('mb-3', 'search-bar')}>
-                        <Form.Control
-                            placeholder="Search"
-                            className={cx('search-box')}
-                            aria-label="Text input with checkbox"
-                        />
-                        <ReplyAllIcon
-                            className={cx('icon')}
-                            onClick={(e) => {
-                                setStateProjectList(null);
-                            }}
-                        />
+                        {stateProjectList !== null && (
+                            <>
+                                <Form.Control
+                                    placeholder="Search"
+                                    className={cx('search-box')}
+                                    onChange={(e) => {
+                                        setStateSearchValue(e.target.value);
+                                    }}
+                                    aria-label="Text input with checkbox"
+                                />
+                                <ReplyAllIcon
+                                    className={cx('icon')}
+                                    onClick={(e) => {
+                                        setStateProjectList(null);
+                                    }}
+                                />
+                            </>
+                        )}
                     </InputGroup>
                 </div>
                 <ListGroup as="ol" className={cx('list-items')} numbered>
