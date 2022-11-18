@@ -10,7 +10,16 @@ const createNew = async (req, res) => {
         });
     }
 };
-
+const search = async (req, res) => {
+    try {
+        const result = await LectureService.search(req.body.search);
+        res.status(HttpStatusCode.OK).json({ data: { lecture: result } });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 const getFullLecture = async (req, res) => {
     try {
         const result = await LectureService.getFullLecture();
@@ -33,4 +42,4 @@ const update = async (req, res) => {
         });
     }
 };
-export const LectureController = { createNew, getFullLecture, update };
+export const LectureController = { createNew, getFullLecture, update, search };

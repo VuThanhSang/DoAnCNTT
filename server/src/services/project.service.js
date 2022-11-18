@@ -8,7 +8,14 @@ const createNew = async (data) => {
         throw new Error(error);
     }
 };
-
+const search = async (data) => {
+    try {
+        const result = await ProjectModel.search(data);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const update = async (id, data) => {
     try {
         const updateData = { ...data, updatedAt: Date.now() };
@@ -47,7 +54,14 @@ const getFullProject = async () => {
         throw new Error(error);
     }
 };
-
+const registerProject = async (idStudent, idProject) => {
+    try {
+        const project = await ProjectModel.registerProject(idStudent, idProject);
+        return project;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const findOneById = async (id) => {
     try {
         const project = await ProjectModel.findOneById(id);
@@ -56,4 +70,13 @@ const findOneById = async (id) => {
         throw new Error(error);
     }
 };
-export const ProjectService = { createNew, update, getFullProject, getProjectTypeList, getList, findOneById };
+export const ProjectService = {
+    createNew,
+    update,
+    getFullProject,
+    getProjectTypeList,
+    getList,
+    findOneById,
+    search,
+    registerProject,
+};

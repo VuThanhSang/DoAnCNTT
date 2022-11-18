@@ -7,7 +7,14 @@ const createNew = async (data) => {
         throw new Error(error);
     }
 };
-
+const search = async (data) => {
+    try {
+        const result = await LectureModel.search(data);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const update = async (id, data) => {
     try {
         const updateData = { ...data, updateAt: Date.now() };
@@ -31,4 +38,4 @@ const getFullLecture = async () => {
     }
 };
 
-export const LectureService = { createNew, update, getFullLecture };
+export const LectureService = { createNew, update, getFullLecture, search };

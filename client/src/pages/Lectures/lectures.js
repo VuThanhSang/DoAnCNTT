@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createAxios } from '~/createInstance';
 import { loginSuccess } from '~/redux/authSlice';
-import { getListLecture } from '~/redux/apiRequest';
+import { getListLecture, searchLecture } from '~/redux/apiRequest';
 
 const cx = classNames.bind(styles);
 const columns = [
@@ -82,15 +82,23 @@ const majors = [
 function Lectures() {
     const [stateMajorsFilter, setStateMajorsFilter] = useState('Tất cả chuyên ngành');
     const user = useSelector((state) => state.auth.login?.currentLogin);
-    const listLecture = useSelector((state) => state.users.lectures?.listLecture);
+    const [listLecture, setStateListLecture] = useState(null);
+    const [stateSearchValue, setStateSearchValue] = useState(null);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(user, dispatch, loginSuccess);
     useEffect(() => {
         if (user?.accessToken) {
-            getListLecture(axiosJWT, user?.accessToken, dispatch);
+            getListLecture(axiosJWT, user?.accessToken, dispatch).then((data) => {
+                setStateListLecture(data.lecture);
+            });
         }
     }, []);
-
+    useEffect(() => {
+        searchLecture(stateSearchValue).then((data) => {
+            setStateListLecture(data);
+        });
+    }, [stateSearchValue]);
+    console.log(listLecture);
     const rows = [];
     listLecture?.forEach((element) => {
         rows.push(
@@ -137,7 +145,13 @@ function Lectures() {
                     </div>
 
                     <InputGroup className={cx('mb-3', 'search-bar')}>
-                        <Form.Control placeholder="Search" aria-label="Text input with checkbox" />
+                        <Form.Control
+                            onChange={(e) => {
+                                setStateSearchValue(e.target.value);
+                            }}
+                            placeholder="Search"
+                            aria-label="Text input with checkbox"
+                        />
                     </InputGroup>
                 </div>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>

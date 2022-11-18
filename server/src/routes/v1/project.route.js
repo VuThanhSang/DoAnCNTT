@@ -11,4 +11,6 @@ router.route('/getProjectType').get(ProjectController.getProjectTypeList);
 router.route('/getList/:typeId').get(ProjectController.getList);
 router.route('/getFullProject').get(verifyToken, ProjectController.getFullProject);
 router.route('/:id').get(ProjectController.findOneById);
+router.route('/search').post(ProjectController.search);
+router.route('/registerProject').post(ProjectController.registerProject);
 export const ProjectRoute = router;

@@ -62,9 +62,9 @@ export const getListLecture = async (axiosJWT, accessToken, dispatch) => {
         const res = await axiosJWT.get('http://localhost:3240/v1/lectures/getFullLecture', {
             headers: { token: `Bearer ${accessToken}` },
         });
-        dispatch(getListLectureSuccess(res.data));
+        return res.data.data;
     } catch (error) {
-        dispatch(getListLectureFailed());
+        return null;
     }
 };
 export const getListStudent = async (axiosJWT, accessToken, dispatch) => {
@@ -74,9 +74,9 @@ export const getListStudent = async (axiosJWT, accessToken, dispatch) => {
             headers: { token: `Bearer ${accessToken}` },
         });
 
-        dispatch(getListStudentSuccess(res.data));
+        return res.data.data;
     } catch (error) {
-        dispatch(getListStudentFailed());
+        return null;
     }
 };
 
@@ -115,5 +115,32 @@ export const updateStudentProfile = async (axiosJWT, accessToken, id, data, disp
         dispatch(updateProfileSuccess(res.data));
     } catch (error) {
         dispatch(loginFailed());
+    }
+};
+
+export const searchStudent = async (query) => {
+    try {
+        const res = await axios.post('http://localhost:3240/v1/students/search', { search: query });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const searchLecture = async (query) => {
+    try {
+        const res = await axios.post('http://localhost:3240/v1/lectures/search', { search: query });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const searchProject = async (query) => {
+    try {
+        const res = await axios.post('http://localhost:3240/v1/projects/search', { search: query });
+        return res.data.data;
+    } catch (error) {
+        return null;
     }
 };

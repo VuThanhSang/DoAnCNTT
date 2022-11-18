@@ -24,6 +24,29 @@ const validateSchema = async (data) => {
     return await studentCollectionSchema.validateAsync(data, { abortEarly: false });
 };
 
+const search = async (data) => {
+    try {
+        const queryName = new RegExp(data) || '';
+        const queryEmail = new RegExp(data) || '';
+        const result = await getDB()
+            .collection(studentCollectionName)
+            .find({
+                $or: [
+                    {
+                        FullName: queryName,
+                    },
+                    {
+                        Email: queryEmail,
+                    },
+                ],
+            })
+            .toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 const findOneById = async (id) => {
     try {
         const result = await getDB()
@@ -49,6 +72,51 @@ const createNew = async (data) => {
         throw new Error(error);
     }
 };
+
+const registerMajors = async (id, data) => {
+    try {
+        await getDB()
+            .collection(studentCollectionName)
+            .findOneAndUpdate({ _id: ObjectId(id) }, { $set: { Majors: data } });
+        const getDataUpdate = await findOneById(id);
+        return getDataUpdate;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const listStudentOfMajors = async (majorsName) => {
+    try {
+        const result = await getDB().collection(studentCollectionName).find({ Majors: majorsName }).toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const getRegistrationHistory = async (id) => {
+    try {
+        const result = await getDB()
+            .collection('Registration History')
+            .aggregate([
+                { $match: { idStudent: id } },
+                { $addFields: { _idProject: { $toObjectId: '$idProject' } } },
+                {
+                    $lookup: {
+                        from: 'Projects',
+                        localField: '_idProject',
+                        foreignField: '_id',
+                        as: 'ProjectDetails',
+                    },
+                },
+            ])
+            .toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 const update = async (id, data) => {
     try {
         const updateData = {
@@ -64,4 +132,12 @@ const update = async (id, data) => {
     }
 };
 
-export const StudentModel = { createNew, update, getFullStudent };
+export const StudentModel = {
+    createNew,
+    update,
+    getFullStudent,
+    search,
+    registerMajors,
+    listStudentOfMajors,
+    getRegistrationHistory,
+};

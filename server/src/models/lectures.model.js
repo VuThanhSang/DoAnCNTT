@@ -33,6 +33,18 @@ const getFullLecture = async () => {
     return result;
 };
 
+const search = async (data) => {
+    try {
+        const result = await getDB()
+            .collection(lectureCollectionName)
+            .find({ $or: [{ FullName: { $regex: data } }, { Email: { $regex: data } }] })
+            .toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 const createNew = async (data) => {
     try {
         const value = await validateSchema(data);
@@ -58,4 +70,4 @@ const update = async (id, data) => {
     }
 };
 
-export const LectureModel = { createNew, update, getFullLecture };
+export const LectureModel = { createNew, update, getFullLecture, search };
