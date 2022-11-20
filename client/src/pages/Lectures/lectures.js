@@ -94,8 +94,8 @@ function Lectures() {
         }
     }, []);
     useEffect(() => {
-        searchLecture(stateSearchValue).then((data) => {
-            setStateListLecture(data);
+        searchLecture(axiosJWT, user?.accessToken, stateSearchValue).then((data) => {
+            setStateListLecture(data.lecture);
         });
     }, [stateSearchValue]);
     console.log(listLecture);

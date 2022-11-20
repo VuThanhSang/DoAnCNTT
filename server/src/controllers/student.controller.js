@@ -76,6 +76,7 @@ const getRegistrationHistory = async (req, res) => {
         });
     }
 };
+
 export const StudentController = {
     createNew,
     getFullStudent,

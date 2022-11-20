@@ -12,5 +12,6 @@ router.route('/getList/:typeId').get(ProjectController.getList);
 router.route('/getFullProject').get(verifyToken, ProjectController.getFullProject);
 router.route('/:id').get(ProjectController.findOneById);
 router.route('/search').post(ProjectController.search);
-router.route('/registerProject').post(ProjectController.registerProject);
+router.route('/registerProject').post(verifyToken, ProjectController.registerProject);
+router.route('/getListOfMajors/:majors').get(ProjectController.getListOfMajors);
 export const ProjectRoute = router;

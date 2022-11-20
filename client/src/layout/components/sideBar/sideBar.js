@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './sideBar.module.scss';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { ConfigRouter } from '~/config';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginGoogleUser } from '~/redux/apiRequest';
 
 const cx = classNames.bind(styles);
 function App(props) {
@@ -44,6 +46,43 @@ function App(props) {
             route: ConfigRouter.Students,
         },
     ];
+    const studentMenu = [
+        {
+            text: 'Đăng ký đề tài',
+            icon: require('../../../asset/icon/RP.png'),
+            route: ConfigRouter.RegisterProject,
+        },
+        {
+            text: 'Quản lý nhóm',
+            icon: require('../../../asset/icon/group.png'),
+            route: ConfigRouter.Project,
+        },
+        {
+            text: 'Đăng ký chuyên ngành',
+            icon: require('../../../asset/icon/register.png'),
+            route: ConfigRouter.RegisterMajors,
+        },
+        {
+            text: 'Quản lý báo cáo',
+            icon: require('../../../asset/icon/icons8-guide-24.png'),
+            route: ConfigRouter.Students,
+        },
+        {
+            text: 'tìm kiếm file',
+            icon: require('../../../asset/icon/fileSearch.png'),
+            route: ConfigRouter.Students,
+        },
+        {
+            text: 'Lịch sử đăng ký',
+            icon: require('../../../asset/icon/history.png'),
+
+            route: ConfigRouter.History,
+        },
+    ];
+    const dispatch = useDispatch();
+    let user = useSelector((state) => state.auth.login?.currentLogin);
+    console.log(user);
+    //logout
     return (
         <div>
             <div className={cx('side-nav-container')}>
@@ -52,17 +91,22 @@ function App(props) {
                         {menuItems.map(({ text, icon, route }) => (
                             <Link to={route} className={cx('nav-items')} key={icon}>
                                 <img className="nav-item-icon" src={icon} alt="icon" />
-                                <div className={cx('tooltip')}>{text}</div>
+                                <div className={cx('item-content')}>{text}</div>
                             </Link>
                         ))}
                     </div>
-                </div>
-                <div className={cx('nav-footer')}>
-                    <img
-                        alt="logout-icon"
-                        src={require('../../../asset/icon/icons8-logout-24.png')}
-                        className={cx('logout-icon')}
-                    ></img>
+
+                    {user?.user?.authType === 'student' && (
+                        <div className={cx('nav-menu')}>
+                            <div style={{ fontSize: 17, margin: 10 }}>Sinh viên</div>
+                            {studentMenu.map(({ text, icon, route }) => (
+                                <Link to={route} className={cx('nav-items')} key={icon}>
+                                    <img className="nav-item-icon" src={icon} alt="icon" />
+                                    <div className={cx('item-content')}>{text}</div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

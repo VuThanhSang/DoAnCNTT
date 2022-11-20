@@ -20,7 +20,7 @@ router.route('/create').post(StudentValidation.createNew, upload.single('Image')
 router.route('/update/:id').put(upload.single('Image'), StudentController.update);
 router.route('/getFullStudent').get(verifyToken, StudentController.getFullStudent);
 router.route('/search').post(StudentController.search);
-router.route('/registerMajors/:id').post(StudentController.registerMajors);
-router.route('/studentMajorsList/:id').get(StudentController.listStudentOfMajors);
-router.route('/registrationHistory/:id').get(StudentController.getRegistrationHistory);
+router.route('/registerMajors/:id').post(verifyToken, StudentController.registerMajors);
+router.route('/studentMajorsList/:id').get(verifyToken, StudentController.listStudentOfMajors);
+router.route('/registrationHistory/:id').get(verifyToken, StudentController.getRegistrationHistory);
 export const StudentRoute = router;
