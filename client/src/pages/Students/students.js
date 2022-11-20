@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper';
 import { DataGrid } from '@mui/x-data-grid';
 import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import { getListStudent, searchStudent } from '~/redux/apiRequest';
+import { filterMajors, getListStudent, searchStudent } from '~/redux/apiRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { createAxios } from '~/createInstance';
 import { loginSuccess } from '~/redux/authSlice';
@@ -18,27 +18,15 @@ for (let index = 9; index < 22; index++) {
 const majors = [
     {
         name: 'Công nghệ phần mềm',
-        id: 'cnpm',
+        id: 'CNPM',
     },
     {
         name: 'Hệ thống thông tin',
-        id: 'httt',
+        id: 'HTTT',
     },
     {
-        name: 'Mạng máy tính',
-        id: 'cnpm',
-    },
-    {
-        name: 'Kỹ thuật dữ liệu',
-        id: 'ktdl',
-    },
-    {
-        name: 'Trí tuệ nhân tạo',
-        id: 'ttnt',
-    },
-    {
-        name: 'An toàn thông tin ',
-        id: 'attt',
+        name: 'An toàn thông tin',
+        id: 'ATTT',
     },
 ];
 
@@ -49,7 +37,6 @@ function Students() {
     const [pageSize, setPageSize] = useState(5);
     const [listStudent, setStateListStudent] = useState(null);
     const user = useSelector((state) => state.auth.login?.currentLogin);
-
     const dispatch = useDispatch();
     let axiosJWT = createAxios(user, dispatch, loginSuccess);
     useEffect(() => {
@@ -60,11 +47,13 @@ function Students() {
         }
     }, []);
     useEffect(() => {
-        searchStudent(stateSearchValue).then((data) => {
+        const accessToken = user?.accessToken;
+        searchStudent(axiosJWT, accessToken, stateSearchValue).then((data) => {
             // console.log(data);
             // console.log(stateSearchValue);
             setStateListStudent(data);
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stateSearchValue]);
     const rows = [];
     let count = 1;
@@ -102,7 +91,7 @@ function Students() {
             },
         },
         { field: 'col4', headerName: 'Họ Và Tên', width: 150 },
-        { field: 'col5', headerName: 'Email', width: 300 },
+        { field: 'col5', headerName: 'Email', width: 250 },
         { field: 'col6', headerName: 'Số Điện Thoại', width: 150 },
         { field: 'col7', headerName: 'Chuyên Ngành', width: 150 },
     ];
@@ -110,9 +99,17 @@ function Students() {
     const MajorsFilter = (e) => {
         if (e === 'all') {
             setStateMajorsFilter('Tất cả chuyên ngành');
+            searchStudent(axiosJWT, user?.accessToken, '').then((data) => {
+                // console.log(data);
+                // console.log(stateSearchValue);
+                setStateListStudent(data);
+            });
         } else {
             const major = majors.find((data) => data.id === e);
             setStateMajorsFilter(major.name);
+            filterMajors(axiosJWT, user?.accessToken, e).then((data) => {
+                setStateListStudent(data);
+            });
         }
     };
     const yearsFilter = (e) => {

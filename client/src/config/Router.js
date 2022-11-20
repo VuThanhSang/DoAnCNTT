@@ -8,5 +8,8 @@ const router = {
     UserProfile: '/userProfile',
     Project: '/projects',
     ProjectDetails: '/projects/:id',
+    RegisterMajors: '/registerMajors',
+    RegisterProject: '/registerProject',
+    History: '/history',
 };
 export default router;

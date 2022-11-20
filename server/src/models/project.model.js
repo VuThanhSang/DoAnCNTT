@@ -91,6 +91,15 @@ const getList = async (projectType) => {
         throw new Error(error);
     }
 };
+const getListOfMajors = async (data) => {
+    try {
+        console.log(data);
+        const result = await getDB().collection(projectCollectionName).find({ Majors: data }).toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const createNew = async (data) => {
     try {
         const value = await validateSchema(data);
@@ -138,4 +147,5 @@ export const ProjectModel = {
     findOneById,
     search,
     registerProject,
+    getListOfMajors,
 };

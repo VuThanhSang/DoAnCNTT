@@ -83,6 +83,16 @@ const findOneById = async (req, res) => {
         });
     }
 };
+const getListOfMajors = async (req, res) => {
+    try {
+        const result = await ProjectService.getListOfMajors(req.params.majors);
+        res.status(200).json({ data: result });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 export const ProjectController = {
     createNew,
     getFullProject,
@@ -92,4 +102,5 @@ export const ProjectController = {
     findOneById,
     search,
     registerProject,
+    getListOfMajors,
 };

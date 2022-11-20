@@ -13,7 +13,7 @@ import { ConfigRouter } from '~/config';
 import images from '~/asset/images';
 import { Link, useParams } from 'react-router-dom';
 import { Form, InputGroup } from 'react-bootstrap';
-import { getProjectTypeList, getProjectList, findOneProjectById } from '~/redux/apiRequest';
+import { getProjectTypeList, getProjectList, findOneProjectById, registerProject } from '~/redux/apiRequest';
 import { useEffect, useState } from 'react';
 
 import Accordion from '@mui/material/Accordion';
@@ -21,22 +21,38 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Button, Divider } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { Alert, Button, Divider, Snackbar } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { createAxios } from '~/createInstance';
+import { loginSuccess } from '~/redux/authSlice';
 
 const cx = classNames.bind(styles);
 function ProjectDetails() {
     const user = useSelector((state) => state.auth.login?.currentLogin);
     const [stateProject, setStateProject] = useState(null);
+    const [success, setSuccess] = useState(false);
     const { id } = useParams();
+    const dispatch = useDispatch();
+    let axiosJWT = createAxios(user, dispatch, loginSuccess);
     useEffect(() => {
         findOneProjectById(id).then((data) => {
             setStateProject(data);
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const TBhandleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
 
-    console.log(user);
+        setSuccess(false);
+    };
+    const submitButton = (e) => {
+        registerProject(axiosJWT, user?.accessToken, user?.user?.data?._id, stateProject._id).then((data) => {
+            console.log(data);
+        });
+        setSuccess(true);
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -236,9 +252,16 @@ function ProjectDetails() {
                 )}
             </div>
             {(user?.user?.data?.Majors === stateProject?.Majors || stateProject?.OtherMajorsRegister === true) && (
-                <Button className={cx('btn')} endIcon={<LoginIcon />} variant="contained">
+                <Button className={cx('btn')} onClick={submitButton} endIcon={<LoginIcon />} variant="contained">
                     Đăng ký đề tài
                 </Button>
+            )}
+            {success && (
+                <Snackbar open={success} autoHideDuration={6000} onClose={TBhandleClose}>
+                    <Alert onClose={TBhandleClose} severity="success" sx={{ width: '100%' }}>
+                        Đăng ký đề tài thành công
+                    </Alert>
+                </Snackbar>
             )}
         </div>
     );

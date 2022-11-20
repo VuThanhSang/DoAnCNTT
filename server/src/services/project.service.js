@@ -70,6 +70,14 @@ const findOneById = async (id) => {
         throw new Error(error);
     }
 };
+const getListOfMajors = async (data) => {
+    try {
+        const project = await ProjectModel.getListOfMajors(data);
+        return project;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 export const ProjectService = {
     createNew,
     update,
@@ -79,4 +87,5 @@ export const ProjectService = {
     findOneById,
     search,
     registerProject,
+    getListOfMajors,
 };

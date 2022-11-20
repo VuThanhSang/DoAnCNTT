@@ -1,12 +1,14 @@
 .side-nav-container {
     background-color: var(--dark);
-    width: 70px;
+    width: 180px;
     height: 90vh;
     color: var(--light);
     position: relative;
     z-index: 100;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-        rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+        rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     .nav-upper,
     .nav-heading,
     .nav-menu {
@@ -16,56 +18,27 @@
         grid-template-rows: repeat(7, 1fr);
         margin-top: 50px;
         .nav-items {
-            height: 56px;
+            height: 50px;
             display: flex;
             color: var(--light);
             border-radius: 5px;
             position: relative;
-            justify-content: center;
-            align-items: center;
-            width: 90%;
-            .nav-item-icon,
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 100%;
             img {
-                margin-right: 5px;
+                margin: 5px;
                 height: 45%;
                 width: 25px;
             }
-            .tooltip {
-                display: none;
-                position: absolute;
-                left: 99%;
-                bottom: 80%;
-
-                width: auto;
-                padding: 4px 8px;
-                border-radius: 15px 15px 15px 0;
-                background-color: var(--dark);
-                border: 2px solid var(--light);
+            .item-content {
+                font-size: 14px;
+                width: 150px;
             }
+            text-decoration: none;
         }
         :hover {
-            transform: translate(0%, -5%);
-        }
-        .nav-items:hover > .tooltip {
-            display: block;
-        }
-    }
-
-    .nav-footer {
-        width: 100%;
-        position: absolute;
-        bottom: 0%;
-        grid-template-columns: 2fr 1fr;
-        background-color: var(--dark);
-        padding: 0 10px;
-
-        .logout-icon {
-            width: 35px;
-            height: 50%;
-            cursor: pointer;
-        }
-        .logout-icon:hover {
-            transform: translate(0%, -5%);
+            background-color: rgb(224, 220, 220);
         }
     }
 }
