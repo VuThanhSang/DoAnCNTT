@@ -1,5 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import JWT from 'jsonwebtoken';
+import { LectureModel } from '../models/lectures.model';
 
 const encodedAccessToken = (userId, authType) => {
     return JWT.sign(
@@ -32,5 +33,12 @@ const encodedRefreshToken = (userId, authType) => {
         },
     );
 };
-
-export const AuthService = { encodedAccessToken, encodedRefreshToken };
+const login = async (data) => {
+    try {
+        const result = await LectureModel.login(data);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+export const AuthService = { encodedAccessToken, encodedRefreshToken, login };

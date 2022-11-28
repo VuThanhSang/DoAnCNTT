@@ -81,7 +81,6 @@ function App(props) {
     ];
     const dispatch = useDispatch();
     let user = useSelector((state) => state.auth.login?.currentLogin);
-    console.log(user);
     //logout
     return (
         <div>
