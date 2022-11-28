@@ -1,6 +1,7 @@
 import Jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { AuthService } from '../services/auth.service';
+import { LectureService } from '../services/lecture.service';
 let userInfo = null;
 let refreshTokenList = [];
 const googleCallBack = [
@@ -74,4 +75,31 @@ const refresh = async (req, res) => {
         res.status(200).json({ accessToken: newAccessToken });
     });
 };
-export const AuthController = { googleCallBack, loginSuccess, loginFailed, refresh, logout };
+
+const login = async (req, res) => {
+    try {
+        const result = await AuthService.login(req.body);
+        userInfo = { data: result, authType: 'lecture' };
+        // await res.redirect('http://localhost:3000');
+        res.status(200).json({ data: result });
+    } catch (error) {
+        res.status(500).json({
+            error: new Error(error).message,
+        });
+    }
+};
+
+const register = async (req, res) => {
+    try {
+        const result = await LectureService.createNew(req.body);
+        userInfo = { data: result, authType: 'lecture' };
+        res.status(200).json({ data: result });
+
+        // await res.redirect('http://localhost:3000');
+    } catch (error) {
+        res.status(500).json({
+            error: new Error(error).message,
+        });
+    }
+};
+export const AuthController = { googleCallBack, loginSuccess, loginFailed, refresh, logout, login, register };

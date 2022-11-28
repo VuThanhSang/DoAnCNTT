@@ -81,7 +81,7 @@ function Header() {
                     <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                         <Stack spacing={0.2}>
                             <Typography sx={{ minWidth: 170 }} fontWeight={300}>
-                                SV: {user.user.data.FullName}
+                                {user.user.authType === 'lecture' ? 'GV' : 'SV'}: {user.user.data.FullName}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
                                 {user.user.data.MSSV}

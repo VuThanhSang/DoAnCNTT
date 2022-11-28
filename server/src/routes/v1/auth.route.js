@@ -15,4 +15,6 @@ router.route('/login/success').get(AuthController.loginSuccess);
 router.route('/login/failed').get(AuthController.loginFailed);
 router.route('/refreshToken').post(AuthController.refresh);
 router.route('/logout').post(verifyToken, AuthController.logout);
+router.route('/login').post(AuthController.login);
+router.route('/register').post(AuthController.register);
 export const AuthRoute = router;

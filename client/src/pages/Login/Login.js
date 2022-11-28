@@ -4,18 +4,41 @@ import { ConfigRouter } from '~/config';
 import Button from '~/layout/components/Button';
 import { FaUser, FaLock, FaFacebook, FaGoogle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { loginGoogleUser } from '~/redux/apiRequest';
+import { login, loginGoogleUser } from '~/redux/apiRequest';
 import { useNavigate } from 'react-router-dom';
 //component
 import images from '~/asset/images';
+import { useState } from 'react';
+import { Alert, Snackbar } from '@mui/material';
 const cx = classNames.bind(styles);
-function Home() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+function LLogin() {
+    const [Email, setEmail] = useState('');
+    const [Password, setPassword] = useState('');
+    const [Login, setLogin] = useState(true);
     const handleLoginWithGoogle = async (e) => {
         e.preventDefault();
         window.open('http://localhost:3240/v1/auth/google/', '_self');
         // await loginGoogleUser(dispatch);
+    };
+    const navigate = useNavigate();
+
+    const TBhandleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setLogin(true);
+    };
+    const handleLogin = () => {
+        // console.log(Email, Password);
+        login(Email, Password).then((data) => {
+            if (data) {
+                setLogin(true);
+                navigate(ConfigRouter.Home);
+            } else {
+                setLogin(false);
+            }
+        });
     };
     return (
         <div className={cx('wrapper')}>
@@ -24,9 +47,22 @@ function Home() {
                     <h2>Login</h2>
                     <form className={cx('form')}>
                         <FaUser />
-                        <input placeholder="Tài khoản hoặc email" name="user" /> <br></br>
+                        <input
+                            placeholder="Tài khoản hoặc email"
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                            }}
+                            name="user"
+                        />{' '}
+                        <br></br>
                         <FaLock />
-                        <input placeholder="Mật khẩu" name="pass" />
+                        <input
+                            placeholder="Mật khẩu"
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                            }}
+                            name="pass"
+                        />
                     </form>
                     <div className={cx('form-item')}>
                         <div>
@@ -37,9 +73,16 @@ function Home() {
                             Quên mật khẩu?
                         </a>
                     </div>
-                    <Button className={cx('btn-login')} to={ConfigRouter.Chat}>
+                    <Button className={cx('btn-login')} onClick={handleLogin}>
                         Đăng nhập
                     </Button>
+                    {Login === false && (
+                        <Snackbar open={!Login} autoHideDuration={6000} onClose={TBhandleClose}>
+                            <Alert onClose={TBhandleClose} severity="error" sx={{ width: '100%' }}>
+                                Sai Email hoặc Mật khẩu
+                            </Alert>
+                        </Snackbar>
+                    )}
                     <div className={cx('social-login-label')}>
                         <div className={cx('label-or')}>
                             <div className={cx('line-left')}></div>
@@ -67,4 +110,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default LLogin;

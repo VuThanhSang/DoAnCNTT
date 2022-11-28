@@ -8,6 +8,7 @@ const lectureCollectionSchema = Joi.object({
     Email: Joi.string().required(),
     FullName: Joi.string().default(null),
     PhoneNumber: Joi.string().min(10).max(10).default(null),
+    Password: Joi.string().required(),
     createdAt: Joi.date().timestamp().default(Date.now()),
     updateAt: Joi.date().timestamp().default(null),
     _destroy: Joi.boolean().default(false),
@@ -70,4 +71,16 @@ const update = async (id, data) => {
     }
 };
 
-export const LectureModel = { createNew, update, getFullLecture, search };
+const login = async (data) => {
+    try {
+        const result = await getDB()
+            .collection(lectureCollectionName)
+            .findOne({ Email: data.email, Password: data.password });
+        console.log(result);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+export const LectureModel = { createNew, update, getFullLecture, search, login };

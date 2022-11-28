@@ -24,6 +24,29 @@ const instance = axios.create({
     withCredentials: true,
     baseURL: 'http://localhost:3240/v1/',
 });
+
+export const login = async (email, password) => {
+    try {
+        const res = await axios.post('http://localhost:3240/v1/auth/login', { email: email, password: password });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const register = async (email, name, phone, password) => {
+    try {
+        const res = await axios.post('http://localhost:3240/v1/auth/register', {
+            Email: email,
+            Password: password,
+            FullName: name,
+            Phone: phone,
+        });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
 export const loginGoogleUser = async (dispatch) => {
     dispatch(loginStart());
     try {
