@@ -28,6 +28,7 @@ function UserProfile() {
         const imgData = Buffer.from(user?.user?.data.Avatar?.img, 'base64');
         base64String = btoa(String.fromCharCode(...new Uint8Array(imgData)));
     }
+    console.log(base64String);
     const fileSelectedHandler = (event) => {
         // const data = new FormData();
         // data.append('file', event.target.files[0]);

@@ -243,3 +243,42 @@ export const registrationHistory = async (axiosJWT, accessToken, id) => {
         return null;
     }
 };
+
+export const createNewProject = async (axiosJWT, accessToken, data) => {
+    try {
+        const res = await axiosJWT.post('http://localhost:3240/v1/projects/create', data, {
+            headers: { token: `Bearer ${accessToken}` },
+        });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+export const uploadFile = async (axiosJWT, files, accessToken) => {
+    try {
+        const res = await axiosJWT.post('http://localhost:3240/v1/files/add', files, {
+            headers: { token: `Bearer ${accessToken}` },
+        });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const ProjectOfLecture = async (id) => {
+    try {
+        const res = await axios.get(`http://localhost:3240/v1/projects/listProjectOfLecture/${id}`);
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const ScoringProject = async (id, Note, Score) => {
+    try {
+        const res = await axios.put(`http://localhost:3240/v1/projects/update/${id}`, { Note: Note, Score: Score });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};

@@ -11,5 +11,8 @@ const router = {
     RegisterMajors: '/registerMajors',
     RegisterProject: '/registerProject',
     History: '/history',
+    CreateProject: '/projects/create',
+    StudentReport: '/students/report',
+    Scoring: '/lectures/scoring',
 };
 export default router;

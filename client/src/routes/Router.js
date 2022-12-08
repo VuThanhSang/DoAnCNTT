@@ -14,6 +14,9 @@ import ProjectDetails from '~/pages/Project/ProjectDetails';
 import RegisterMajors from '~/pages/Register/Majors/majors';
 import RProject from '~/pages/Register/Project/project';
 import History from '~/pages/Students/RegistrationHistory/history';
+import CreateProject from '~/pages/Project/CreateProject';
+import StudentReport from '~/pages/Students/Report/report';
+import Scoring from '~/pages/Lectures/Scoring';
 // Public routes
 const publicRoutes = [
     { path: ConfigRouter.Home, component: Home },
@@ -28,6 +31,9 @@ const publicRoutes = [
     { path: ConfigRouter.RegisterMajors, component: RegisterMajors },
     { path: ConfigRouter.RegisterProject, component: RProject },
     { path: ConfigRouter.History, component: History },
+    { path: ConfigRouter.CreateProject, component: CreateProject },
+    { path: ConfigRouter.StudentReport, component: StudentReport },
+    { path: ConfigRouter.Scoring, component: Scoring },
 ];
 const privateRoutes = [];
 
