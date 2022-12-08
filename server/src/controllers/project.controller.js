@@ -93,6 +93,16 @@ const getListOfMajors = async (req, res) => {
         });
     }
 };
+const ListProjectByLectureId = async (req, res) => {
+    try {
+        const result = await ProjectService.ListProjectByLectureId(req.params.id);
+        res.status(200).json({ data: result });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 export const ProjectController = {
     createNew,
     getFullProject,
@@ -103,4 +113,5 @@ export const ProjectController = {
     search,
     registerProject,
     getListOfMajors,
+    ListProjectByLectureId,
 };

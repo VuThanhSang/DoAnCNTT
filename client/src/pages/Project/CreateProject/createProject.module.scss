@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-image: radial-gradient(closest-side at 50% 135%, #ffffff 50%, #eceff1 100%);
+}
+.wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #fffeff;
+    border: 1px solid black;
+    justify-content: center;
+    // align-items: center;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 20px rgb(0 0 0 / 7%);
+    border: none;
+    margin: auto;
+    display: flex;
+}
+.wrapper h1 {
+    margin: 30px;
+    font-size: 40px;
+}
+.form-signup {
+    width: 70%;
+    height: 70%;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.form-signup input {
+    margin: 15px;
+    font-size: 15px;
+    border-radius: 3px;
+}
+.form-input {
+    color: rgba(var(--f52, 142, 142, 142), 1);
+    font-size: 15px;
+    line-height: 16px;
+    text-align: center;
+    margin: 15px;
+}
+.btn-signup {
+    margin: 20px 0;
+    font-size: 20px;
+    text-decoration: none;
+    list-style: none;
+    color: black;
+    border-radius: 10px;
+    font-weight: 600;
+    background-color: pink;
+    opacity: 0.6;
+    padding: 10px;
+    width: 90%;
+    border: none;
+    position: relative;
+    left: 5%;
+}
+.btn-signup:hover {
+    opacity: 1;
+}
+.label-text {
+    margin-top: 10px;
+    font-size: 18px;
+}
+.label-or {
+    display: flex;
+    justify-content: space-around;
+}
+.line-left {
+    text-decoration: line-through;
+    background-color: rgba(219, 219, 219, 1);
+    height: 1px;
+    width: 15%;
+    position: relative;
+    top: 20px;
+}
+.line-right {
+    text-decoration: line-through;
+    background-color: rgba(219, 219, 219, 1);
+    height: 1px;
+    width: 15%;
+    position: relative;
+    right: 0;
+    top: 20px;
+}
+.icon-login {
+    display: flex;
+    margin: 20px;
+}
+.icon-login {
+    margin-top: 20px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.face {
+    margin-right: 20px;
+    font-size: 25px;
+    border: none;
+}
+.goog {
+    margin-right: 10px;
+    font-size: 25px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+.face:hover {
+    color: red;
+}
+.goog:hover {
+    color: red;
+}
+.con-signin {
+    padding: 10px;
+}
+.signin:hover {
+    color: red;
+}
+.radioGroup {
+    justify-content: space-evenly;
+    align-items: center;
+    height: 70%;
+}
+.year-picker {
+    display: flex;
+    justify-content: center;
+
+    height: 70%;
+}

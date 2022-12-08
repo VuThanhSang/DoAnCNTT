@@ -78,6 +78,14 @@ const getListOfMajors = async (data) => {
         throw new Error(error);
     }
 };
+const ListProjectByLectureId = async (data) => {
+    try {
+        const result = await ProjectModel.ListProjectByLectureId(data);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 export const ProjectService = {
     createNew,
     update,
@@ -88,4 +96,5 @@ export const ProjectService = {
     search,
     registerProject,
     getListOfMajors,
+    ListProjectByLectureId,
 };

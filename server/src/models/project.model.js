@@ -138,6 +138,29 @@ const update = async (id, data) => {
     }
 };
 
+const ListProjectByLectureId = async (id) => {
+    try {
+        const result = await getDB()
+            .collection(projectCollectionName)
+            .aggregate([
+                { $match: { Instructor: id } },
+                { $addFields: { _idProject: { $toString: '$_id' } } },
+                {
+                    $lookup: {
+                        from: 'Files',
+                        localField: '_idProject',
+                        foreignField: 'projectId',
+                        as: 'report',
+                    },
+                },
+            ])
+            .toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 export const ProjectModel = {
     createNew,
     update,
@@ -148,4 +171,5 @@ export const ProjectModel = {
     search,
     registerProject,
     getListOfMajors,
+    ListProjectByLectureId,
 };

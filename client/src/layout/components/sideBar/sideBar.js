@@ -65,7 +65,7 @@ function App(props) {
         {
             text: 'Quản lý báo cáo',
             icon: require('../../../asset/icon/icons8-guide-24.png'),
-            route: ConfigRouter.Students,
+            route: ConfigRouter.StudentReport,
         },
         {
             text: 'tìm kiếm file',
@@ -77,6 +77,23 @@ function App(props) {
             icon: require('../../../asset/icon/history.png'),
 
             route: ConfigRouter.History,
+        },
+    ];
+    const lectureMenu = [
+        {
+            text: 'Tạo đề tài',
+            icon: require('../../../asset/icon/RP.png'),
+            route: ConfigRouter.CreateProject,
+        },
+        {
+            text: 'Nhận xét kết quả nhóm hướng dẫn',
+            icon: require('../../../asset/icon/group.png'),
+            route: ConfigRouter.Scoring,
+        },
+        {
+            text: 'Phản biện đề tài',
+            icon: require('../../../asset/icon/register.png'),
+            route: ConfigRouter.RegisterMajors,
         },
     ];
     const dispatch = useDispatch();
@@ -99,6 +116,17 @@ function App(props) {
                         <div className={cx('nav-menu')}>
                             <div style={{ fontSize: 17, margin: 10 }}>Sinh viên</div>
                             {studentMenu.map(({ text, icon, route }) => (
+                                <Link to={route} className={cx('nav-items')} key={icon}>
+                                    <img className="nav-item-icon" src={icon} alt="icon" />
+                                    <div className={cx('item-content')}>{text}</div>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                    {user?.user?.authType === 'lecture' && (
+                        <div className={cx('nav-menu')}>
+                            <div style={{ fontSize: 17, margin: 10 }}>Giảng viên</div>
+                            {lectureMenu.map(({ text, icon, route }) => (
                                 <Link to={route} className={cx('nav-items')} key={icon}>
                                     <img className="nav-item-icon" src={icon} alt="icon" />
                                     <div className={cx('item-content')}>{text}</div>
