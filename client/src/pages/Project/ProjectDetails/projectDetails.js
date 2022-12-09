@@ -13,7 +13,13 @@ import { ConfigRouter } from '~/config';
 import images from '~/asset/images';
 import { Link, useParams } from 'react-router-dom';
 import { Form, InputGroup } from 'react-bootstrap';
-import { getProjectTypeList, getProjectList, findOneProjectById, registerProject } from '~/redux/apiRequest';
+import {
+    getProjectTypeList,
+    getProjectList,
+    findOneProjectById,
+    registerProject,
+    FollowProject,
+} from '~/redux/apiRequest';
 import { useEffect, useState } from 'react';
 
 import Accordion from '@mui/material/Accordion';
@@ -53,7 +59,11 @@ function ProjectDetails() {
         });
         setSuccess(true);
     };
-
+    const followButton = (e) => {
+        FollowProject(user?.user?.data?._id, stateProject._id).then();
+        setSuccess(true);
+    };
+    console.log(stateProject);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('des')}>
@@ -251,11 +261,46 @@ function ProjectDetails() {
                     </ListGroup>
                 )}
             </div>
-            {(user?.user?.data?.Majors === stateProject?.Majors || stateProject?.OtherMajorsRegister === true) && (
-                <Button className={cx('btn')} onClick={submitButton} endIcon={<LoginIcon />} variant="contained">
-                    Đăng ký đề tài
+            {(user?.user?.data?.Majors === stateProject?.Majors || stateProject?.OtherMajorsRegister === true) &&
+                !stateProject?.Leader &&
+                stateProject.TotalStudents < 2 && (
+                    <Button className={cx('btn')} onClick={submitButton} endIcon={<LoginIcon />} variant="contained">
+                        Đăng ký đề tài
+                    </Button>
+                )}
+            {stateProject?.Leader &&
+                !stateProject.Member.includes(user?.user?.data?._id) &&
+                !(stateProject?.Follow.filter((e) => e.studentId === user?.user?.data?._id).length > 0) &&
+                stateProject.TotalStudents < 2 && (
+                    <Button className={cx('btn')} onClick={followButton} endIcon={<LoginIcon />} variant="contained">
+                        Xin vào nhóm
+                    </Button>
+                )}
+            {stateProject?.Member.includes(user?.user?.data?._id) && stateProject.TotalStudents < 2 && (
+                <Button
+                    className={cx('btn')}
+                    onClick={submitButton}
+                    endIcon={<LoginIcon />}
+                    variant="contained"
+                    disabled
+                >
+                    Bạn đã đăng ký đề tài này
                 </Button>
             )}
+            {stateProject?.Follow.filter((e) => e.studentId === user?.user?.data?._id).length > 0 &&
+                stateProject.TotalStudents < 2 &&
+                stateProject?.Leader && (
+                    <Button
+                        className={cx('btn')}
+                        onClick={submitButton}
+                        endIcon={<LoginIcon />}
+                        variant="contained"
+                        disabled
+                    >
+                        Đã xin vào nhóm và đang đợi nhóm trưởng duyệt
+                    </Button>
+                )}
+
             {success && (
                 <Snackbar open={success} autoHideDuration={6000} onClose={TBhandleClose}>
                     <Alert onClose={TBhandleClose} severity="success" sx={{ width: '100%' }}>

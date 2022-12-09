@@ -1,3 +1,5 @@
+import { ProjectModel } from './project.model';
+
 const { ObjectId } = require('mongodb');
 const Joi = require('joi');
 const { getDB } = require('~/config/mongodb');
@@ -16,6 +18,7 @@ const studentCollectionSchema = Joi.object({
         contentType: Joi.string().default(null),
     }).default(null),
     createdAt: Joi.date().timestamp().default(Date.now()),
+    Leader: Joi.string().default(null),
     updateAt: Joi.date().timestamp().default(null),
     _destroy: Joi.boolean().default(false),
 });
@@ -140,4 +143,5 @@ export const StudentModel = {
     registerMajors,
     listStudentOfMajors,
     getRegistrationHistory,
+    findOneById,
 };

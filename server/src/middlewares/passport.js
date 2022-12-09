@@ -37,6 +37,14 @@ passport.use(
         },
     ),
 );
+const createRandom = () => {
+    var randomstring = '';
+    var characters = '1234567890';
+    for (var i, i = 0; i < 8; i++) {
+        randomstring += characters.charAt(Math.floor(Math.random() * 8));
+    }
+    return randomstring;
+};
 //passport  google
 passport.use(
     new GoogleStrategy(
@@ -47,21 +55,25 @@ passport.use(
         },
         async (req, accessToken, refreshToken, profile, done) => {
             try {
-                if (profile._json.hd) {
-                    if (profile._json.hd.includes('student.hcmute')) {
-                        const exitsStudent = await getDB().collection('Students').findOne({ Email: profile.email });
-                        if (exitsStudent) {
-                            return done(null, { data: exitsStudent, authType: 'student' });
-                        }
-                        const newStudent = await StudentModel.createNew({
-                            Email: profile.email,
-                            FullName: profile.displayName,
-                            MSSV: profile.email.slice(0, 8),
-                        });
-                        return done(null, { data: newStudent, authType: 'student' });
-                    }
+                const exitsStudent = await getDB().collection('Students').findOne({ Email: profile.email });
+                if (exitsStudent) {
+                    return done(null, { data: exitsStudent, authType: 'student' });
                 }
-                return done(null, { data: null, message: 'cant login' });
+                let newStudent;
+                if (profile._json.hd) {
+                    newStudent = await StudentModel.createNew({
+                        Email: profile.email,
+                        FullName: profile.displayName,
+                        MSSV: profile.email.slice(0, 8),
+                    });
+                } else {
+                    newStudent = await StudentModel.createNew({
+                        Email: profile.email,
+                        FullName: profile.displayName,
+                        MSSV: createRandom(),
+                    });
+                }
+                return done(null, { data: newStudent, authType: 'student' });
             } catch (error) {
                 done(error, false);
             }
