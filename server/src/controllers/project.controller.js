@@ -103,6 +103,26 @@ const ListProjectByLectureId = async (req, res) => {
         });
     }
 };
+const getFollow = async (req, res) => {
+    try {
+        const result = await ProjectService.getFollow(req.params.id);
+        res.status(200).json({ data: result });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
+const followProject = async (req, res) => {
+    try {
+        const result = await ProjectService.followProject(req.body.studentId, req.body.projectId);
+        res.status(200).json({ data: result });
+    } catch (error) {
+        res.status(HttpStatusCode.INTERNAL_SERVER).json({
+            error: new Error(error).message,
+        });
+    }
+};
 export const ProjectController = {
     createNew,
     getFullProject,
@@ -114,4 +134,6 @@ export const ProjectController = {
     registerProject,
     getListOfMajors,
     ListProjectByLectureId,
+    getFollow,
+    followProject,
 };

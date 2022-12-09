@@ -78,9 +78,25 @@ const getListOfMajors = async (data) => {
         throw new Error(error);
     }
 };
+const getFollow = async (id) => {
+    try {
+        const result = await ProjectModel.getFollow(id);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 const ListProjectByLectureId = async (data) => {
     try {
         const result = await ProjectModel.ListProjectByLectureId(data);
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+const followProject = async (studentId, projectId) => {
+    try {
+        const result = await ProjectModel.followProject(studentId, projectId);
         return result;
     } catch (error) {
         throw new Error(error);
@@ -97,4 +113,6 @@ export const ProjectService = {
     registerProject,
     getListOfMajors,
     ListProjectByLectureId,
+    getFollow,
+    followProject,
 };

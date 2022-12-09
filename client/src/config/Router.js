@@ -14,5 +14,7 @@ const router = {
     CreateProject: '/projects/create',
     StudentReport: '/students/report',
     Scoring: '/lectures/scoring',
+    GuideLogin: '/guideLogin',
+    GroupManager: '/GroupManager',
 };
 export default router;

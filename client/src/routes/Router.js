@@ -17,6 +17,8 @@ import History from '~/pages/Students/RegistrationHistory/history';
 import CreateProject from '~/pages/Project/CreateProject';
 import StudentReport from '~/pages/Students/Report/report';
 import Scoring from '~/pages/Lectures/Scoring';
+import GuideLogin from '~/pages/Login/guide/guideLogin';
+import GroupManager from '~/pages/Students/GroupManager';
 // Public routes
 const publicRoutes = [
     { path: ConfigRouter.Home, component: Home },
@@ -34,6 +36,8 @@ const publicRoutes = [
     { path: ConfigRouter.CreateProject, component: CreateProject },
     { path: ConfigRouter.StudentReport, component: StudentReport },
     { path: ConfigRouter.Scoring, component: Scoring },
+    { path: ConfigRouter.GuideLogin, component: GuideLogin },
+    { path: ConfigRouter.GroupManager, component: GroupManager },
 ];
 const privateRoutes = [];
 

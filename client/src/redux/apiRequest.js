@@ -282,3 +282,24 @@ export const ScoringProject = async (id, Note, Score) => {
         return null;
     }
 };
+
+export const FollowProject = async (studentId, projectId) => {
+    try {
+        const res = await axios.post('http://localhost:3240/v1/projects/followProject', {
+            studentId: studentId,
+            projectId: projectId,
+        });
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const getFollow = async (id) => {
+    try {
+        const res = await axios.get(`http://localhost:3240/v1/projects/getFollow/${id}`);
+        return res.data.data;
+    } catch (error) {
+        return null;
+    }
+};

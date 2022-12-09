@@ -1,3 +1,5 @@
+import { StudentModel } from './students.model';
+
 const { ObjectId } = require('mongodb');
 const Joi = require('joi');
 const { getDB } = require('~/config/mongodb');
@@ -21,6 +23,7 @@ const projectCollectionSchema = Joi.object({
     Member: Joi.array().items(Joi.string()).default([]),
     LectureCounterArgument: Joi.string().default(null),
     Score: Joi.string().default('Chưa có điểm'),
+    Follow: Joi.array().default([]),
 });
 
 const registrationHistorySchema = Joi.object({
@@ -113,11 +116,68 @@ const createNew = async (data) => {
 const registerProject = async (idStudent, idProject) => {
     try {
         const valueRH = await validateSchemaRH({ idStudent: idStudent, idProject: idProject });
-        await getDB()
-            .collection(projectCollectionName)
-            .findOneAndUpdate({ _id: ObjectId(idProject) }, { $push: { Member: idStudent } });
+        const project = await findOneById(idProject);
+        if (project.Leader === null) {
+            await getDB()
+                .collection(projectCollectionName)
+                .findOneAndUpdate(
+                    { _id: ObjectId(idProject) },
+                    { $set: { Leader: idStudent, Status: true, Member: [idStudent], TotalStudents: 1 } },
+                );
+        } else {
+            await getDB()
+                .collection(projectCollectionName)
+                .findOneAndUpdate({ _id: ObjectId(idProject) }, { $push: { Member: idStudent } });
+            await getDB()
+                .collection(projectCollectionName)
+                .findOneAndUpdate({ _id: ObjectId(idProject) }, { $set: { TotalStudents: 2 } });
+            await getDB()
+                .collection(projectCollectionName)
+                .updateOne({ _id: ObjectId(idProject) }, { $pull: { Follow: { studentId: ObjectId(idStudent) } } });
+        }
         await getDB().collection('Registration History').insertOne(valueRH);
         return await findOneById(idProject);
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const followProject = async (studentId, projectId) => {
+    try {
+        const result = await getDB()
+            .collection(projectCollectionName)
+            .findOneAndUpdate({ _id: ObjectId(projectId) }, { $push: { Follow: { studentId: ObjectId(studentId) } } });
+        return await findOneById(idProject);
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+const getFollow = async (id) => {
+    try {
+        const student = await StudentModel.findOneById(id);
+        const result = await getDB()
+            .collection(projectCollectionName)
+            .aggregate([
+                { $match: { _id: ObjectId(student.Leader) } },
+                { $unwind: { path: '$Follow', preserveNullAndEmptyArrays: true } },
+                {
+                    $lookup: {
+                        from: 'Students',
+                        localField: 'Follow.studentId',
+                        foreignField: '_id',
+                        as: 'Follow.student',
+                    },
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        Name: { $first: '$Name' },
+                        Follow: { $push: '$Follow' },
+                    },
+                },
+            ])
+            .toArray();
+        return result;
     } catch (error) {
         throw new Error(error);
     }
@@ -172,4 +232,6 @@ export const ProjectModel = {
     registerProject,
     getListOfMajors,
     ListProjectByLectureId,
+    getFollow,
+    followProject,
 };

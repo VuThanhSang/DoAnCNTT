@@ -32,7 +32,7 @@ function App(props) {
         {
             text: 'Hướng Dẫn Đăng ký',
             icon: require('../../../asset/icon/icons8-guide-24.png'),
-            route: ConfigRouter.Students,
+            route: ConfigRouter.GuideLogin,
         },
         {
             text: 'Thống Kê',
@@ -55,7 +55,7 @@ function App(props) {
         {
             text: 'Quản lý nhóm',
             icon: require('../../../asset/icon/group.png'),
-            route: ConfigRouter.Project,
+            route: ConfigRouter.GroupManager,
         },
         {
             text: 'Đăng ký chuyên ngành',
