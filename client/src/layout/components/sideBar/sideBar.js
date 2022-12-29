@@ -34,16 +34,11 @@ function App(props) {
             icon: require('../../../asset/icon/icons8-guide-24.png'),
             route: ConfigRouter.GuideLogin,
         },
-        {
-            text: 'Thống Kê',
-            icon: require('../../../asset/icon/icons8-chart-24.png'),
 
-            route: ConfigRouter.Students,
-        },
         {
             text: 'Tìm Kiếm',
             icon: require('../../../asset/icon/icons8-search-24.png'),
-            route: ConfigRouter.Students,
+            route: ConfigRouter.Search,
         },
     ];
     const studentMenu = [

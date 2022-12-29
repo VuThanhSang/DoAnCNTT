@@ -12,4 +12,5 @@ export const CollectionName = {
     NOTIFICATION_COLLECTION_NAME: 'Notifications',
     PROJECT_COLLECTION_NAME: 'Projects',
     FILES_COLLECTION_NAME: 'Files',
+    NOTIFICATION_COLLECTION_NAME: 'Notifications',
 };

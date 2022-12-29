@@ -19,6 +19,7 @@ import StudentReport from '~/pages/Students/Report/report';
 import Scoring from '~/pages/Lectures/Scoring';
 import GuideLogin from '~/pages/Login/guide/guideLogin';
 import GroupManager from '~/pages/Students/GroupManager';
+import Search from '~/pages/Search';
 // Public routes
 const publicRoutes = [
     { path: ConfigRouter.Home, component: Home },
@@ -38,6 +39,7 @@ const publicRoutes = [
     { path: ConfigRouter.Scoring, component: Scoring },
     { path: ConfigRouter.GuideLogin, component: GuideLogin },
     { path: ConfigRouter.GroupManager, component: GroupManager },
+    { path: ConfigRouter.Search, component: Search },
 ];
 const privateRoutes = [];
 

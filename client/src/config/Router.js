@@ -16,5 +16,6 @@ const router = {
     Scoring: '/lectures/scoring',
     GuideLogin: '/guideLogin',
     GroupManager: '/GroupManager',
+    Search: '/search',
 };
 export default router;

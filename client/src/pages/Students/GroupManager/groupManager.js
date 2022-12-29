@@ -46,7 +46,7 @@ function GroupManager() {
             setLeadProject(data);
         });
     }, []);
-    // console.log(LeadProject);
+    console.log(LeadProject[0]?.Follow.Length);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('des')}>
@@ -54,7 +54,7 @@ function GroupManager() {
                     <h3> Các dự án đã đăng ký</h3>
                 </div>
                 <ListGroup as="ol" className={cx('list-items')} numbered>
-                    {LeadProject &&
+                    {LeadProject[0]?.Follow.Length > 0 &&
                         LeadProject[0]?.Follow?.map((item) => (
                             <ListGroup.Item
                                 action
@@ -65,19 +65,29 @@ function GroupManager() {
                                 }}
                             >
                                 <div className="ms-2 me-auto">
-                                    <div className="fw-bold"> {item.student[0].FullName}</div>
-                                    {item.student[0].Email}
+                                    <div className="fw-bold"> {item.student[0]?.FullName}</div>
+                                    {item.student[0]?.Email}
                                 </div>
                                 <Badge bg="primary" pill></Badge>
-                                <Button
-                                    onClick={async (e) => {
-                                        addBtn();
-                                    }}
-                                >
-                                    Thêm vào nhóm
-                                </Button>
+                                {LeadProject[0].total < 2 && (
+                                    <Button
+                                        onClick={async (e) => {
+                                            addBtn();
+                                        }}
+                                    >
+                                        Thêm vào nhóm
+                                    </Button>
+                                )}
+                                {LeadProject[0].total === 2 && <Button disabled>Nhóm đã đủ người</Button>}
                             </ListGroup.Item>
                         ))}
+                    {(LeadProject[0]?.Follow.Length === 0 || !LeadProject[0]?.Follow.Length) && (
+                        <ListGroup.Item
+                            className={cx('d-flex', 'justify-content-between', 'align-items-start', 'list-item')}
+                        >
+                            Hiện tại không có ai quan tâm đến đồ án này
+                        </ListGroup.Item>
+                    )}
                 </ListGroup>
             </div>
 
